@@ -1,41 +1,17 @@
-
-# coding: utf-8
-
-# In[254]:
-
-
 import requests
 import pandas as pd
 from bs4 import BeautifulSoup
-
-
-# In[255]:
-
 
 r=requests.get('https://www.nseindia.com/live_market/dynaContent/live_watch/option_chain/optionKeys.jsp?symbolCode=-10006&symbol=NIFTY&symbol=NIFTY&instrument=-&date=-&segmentLink=17&symbolCount=2&segmentLink=17#')
 c=r.content
 
 
-# In[256]:
-
-
 soup=BeautifulSoup(c,'html.parser')
-
-
-# In[257]:
-
 
 table_it=soup.find_all(class_='opttbldata')
 table_cls_1=soup.find_all(id='octable')
 
-
-# In[258]:
-
-
 col_list=[]
-
-
-# In[259]:
 
 
 for mytable in table_cls_1:
@@ -54,14 +30,8 @@ for mytable in table_cls_1:
         print('no thead')
 
 
-# In[260]:
-
-
 cols_list_fnl=[e for e in col_list if e not in('CALLS','PUTS','Chart','\xa2\xa0','\xa0')]
 print (cols_list_fnl)
-
-
-# In[280]:
 
 
 table_cls_2=soup.find_all(id='octable')
@@ -71,20 +41,15 @@ new_table2=pd.DataFrame(index=range(0,len(req_row)-80),columns=cols_list_fnl)
 row_marker=0
 
 
-# In[282]:
-
-
-
 for row_number, tr_nos in enumerate(req_row):
-    
-     
-    # This ensures that we use only the rows with values    
+        
+        
     if row_number <=1 or row_number == len(req_row)-1:   
         pass
           
     td_columns = tr_nos.find_all('td')
      
-     # This removes the graphs columns
+   
     select_cols = td_columns[1:22]                  
     cols_horizontal = range(0,len(select_cols))
       
@@ -99,20 +64,7 @@ for row_number, tr_nos in enumerate(req_row):
         tr = tr.replace(',' , '')
         new_table2.ix[row_marker,[nu]]= tr
          
-    row_marker += 1   
-          
-new_table2.to_csv('Downloads/Option_Chain_Table14.csv')
+    row_marker += 1             
+new_table.to_csv('Downloads/Option_Chain_Table14.csv')
 
-
-# In[279]:
-
-
-new_table
-
-
-# In[184]:
-
-
-a=['1','2','3']
-list(enumerate(a))
 
